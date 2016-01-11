@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
 		@Override
 		protected Void doInBackground(Void... v) {
-			bluetoothSerial.setSockedLocked(true);
 			while (asyncTaskEnabled) {
 				try {
 					if (update) {
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 				} catch (Exception e) {
 				}
 			}
-			bluetoothSerial.setSockedLocked(false);
 			return null;
 		}
 
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
 				progressValue++;
-				System.arraycopy(toHex(progressValue), 0, data, 1, 2);
+				System.arraycopy(toHex8(progressValue), 0, data, 1, 2);
 				update = true;
 				textRise.setText("Rise time: " + progressValue * TIME_RESOLUTION + " ms");
 			}
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
 				progressValue++;
-				System.arraycopy(toHex(progressValue), 0, data, 3, 2);
+				System.arraycopy(toHex8(progressValue), 0, data, 3, 2);
 				update = true;
 				textFall.setText("Fall time: " + progressValue * TIME_RESOLUTION + " ms");
 			}
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-				System.arraycopy(toHex(progressValue), 0, data, 5, 2);
+				System.arraycopy(toHex8(progressValue), 0, data, 5, 2);
 				update = true;
 				textRed.setText("Red: " + progressValue);
 			}
@@ -153,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-				System.arraycopy(toHex(progressValue), 0, data, 7, 2);
+				System.arraycopy(toHex8(progressValue), 0, data, 7, 2);
 				update = true;
 				textGreen.setText("Green: " + progressValue);
 			}
@@ -173,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-				System.arraycopy(toHex(progressValue), 0, data, 9, 2);
+				System.arraycopy(toHex8(progressValue), 0, data, 9, 2);
 				update = true;
 				textBlue.setText("Blue: " + progressValue);
 			}
@@ -211,12 +209,12 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
+		setAllEnabled(false);
 		asyncTaskEnabled = false;
 		bluetoothSerial.poisonPill();
 		try {
 			bluetoothSerial.disconnect();
 		} catch (Exception e) {
-			toastShow(e.toString());
 		}
 		super.onDestroy();
 	}
@@ -225,56 +223,36 @@ public class MainActivity extends AppCompatActivity {
 		try {
 			bluetoothSerial.connect(0);
 			toastShow("Connect success");
+			asyncTaskEnabled = true;
+			new UpdateAsyncTask().execute();
+			setAllEnabled(true);
 		} catch (Exception e) {
 			toastShow(e.toString());
 		}
 	}
 
 	public void onDxnHandler(View view) {
-		if (bluetoothSerial.getSocketLocked()) {
-			toastShow("Socket occupied");
-		} else {
-			try {
-				bluetoothSerial.disconnect();
-				toastShow("Disconnect success");
-			} catch (Exception e) {
-				toastShow(e.toString());
-			}
-		}
-	}
-
-	public void onStartHandler(View view) {
-		if (bluetoothSerial.getSocketLocked()) {
-			toastShow("Socket occupied");
-		} else if (asyncTaskEnabled) {
-			toastShow("Start already");
-		} else {
-			asyncTaskEnabled = true;
-			new UpdateAsyncTask().execute();
-			setAllEnabled(true);
-		}
-	}
-
-	public void onStopHandler(View view) {
-		if (asyncTaskEnabled) {
-			setAllEnabled(false);
-			asyncTaskEnabled = false;
-			bluetoothSerial.poisonPill();
-		} else {
-			toastShow("Stop already");
+		setAllEnabled(false);
+		asyncTaskEnabled = false;
+		bluetoothSerial.poisonPill();
+		try {
+			bluetoothSerial.disconnect();
+			toastShow("Disconnect success");
+		} catch (Exception e) {
+			toastShow(e.toString());
 		}
 	}
 
 	public void onRdoHandler(View view) {
 		switch (view.getId()) {
 			case R.id.rdo_on:
-				data[0] = 0;
-				break;
-			case R.id.rdo_blink:
 				data[0] = 1;
 				break;
-			case R.id.rdo_fade:
+			case R.id.rdo_blink:
 				data[0] = 2;
+				break;
+			case R.id.rdo_fade:
+				data[0] = 3;
 				break;
 			default:
 				break;
@@ -306,10 +284,10 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private byte[] toHex(int x) {
+	private byte[] toHex8(int x) {
 		byte[] hex = new byte[2];
-		hex[0] = (byte) (x % 16 + 48);
-		hex[1] = (byte) (x / 16 + 48);
+		hex[0] = (byte) ((x & 0x0F) + 48);
+		hex[1] = (byte) (((x >> 4) & 0x0F) + 48);
 		return hex;
 	}
 

@@ -26,7 +26,6 @@ public class BluetoothSerial {
 	private OutputStream outputStream = null;
 	private BlockingQueue<byte[]> readQ = new LinkedBlockingQueue<>(8);
 	private boolean threadEnabled = false;
-	private boolean socketLocked = true;
 	private byte[] buffer = new byte[BUFFER_SIZE];
 	private int frameSize;
 	private int count;
@@ -85,17 +84,18 @@ public class BluetoothSerial {
 			throw new Exception("Bluetooth not supported on this device");
 		} else if (!bluetoothAdapter.isEnabled()) {
 			activity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 0);
+			throw new Exception("Bluetooth turned off");
 		} else if (bluetoothDevice != null) {
 			throw new Exception("Connect already");
 		} else {
 			for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
-				if (device.getName().equals("skin_motion_capture")) {
+				if (device.getName().equals("TS-UC025")) {
 					bluetoothDevice = device;
 					break;
 				}
 			}
 			if (bluetoothDevice == null) {
-				throw new Exception("Cannot find skin_motion_capture");
+				throw new Exception("Cannot find TS-UC025");
 			} else {
 				try {
 					UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
@@ -110,7 +110,6 @@ public class BluetoothSerial {
 						this.frameSize = frameSize;
 						new Thread(new ReadFrameThread()).start();
 					}
-					socketLocked = false;
 				} catch (Exception e) {
 					throw e;
 				}
@@ -119,7 +118,6 @@ public class BluetoothSerial {
 	}
 
 	public void disconnect() throws Exception {
-		socketLocked = true;
 		if (bluetoothDevice == null) {
 			throw new Exception("Disconnect already");
 		} else {
@@ -159,14 +157,6 @@ public class BluetoothSerial {
 		}
 	}
 
-	public boolean getSocketLocked() {
-		return socketLocked;
-	}
-
-	public void setSockedLocked(boolean locked) {
-		socketLocked = locked;
-	}
-
 	public byte[] read() throws Exception {
 		return readQ.take();
 	}
@@ -183,9 +173,9 @@ public class BluetoothSerial {
 		count = 0;
 	}
 
-	public void flush() throws Exception {
-		while (!readQ.isEmpty()) {
-			readQ.take();
+	public void flush() {
+		while (readQ.peek() != null) {
+			readQ.poll();
 		}
 	}
 

@@ -31,28 +31,6 @@
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/margin">
-
-		<Button
-			android:layout_weight="1"
-			android:layout_width="0px"
-			android:layout_height="wrap_content"
-			android:text="@string/str_start"
-			android:onClick="onStartHandler"/>
-
-		<Button
-			android:layout_weight="1"
-			android:layout_width="0px"
-			android:layout_height="wrap_content"
-			android:text="@string/str_stop"
-			android:onClick="onStopHandler"/>
-
-	</LinearLayout>
-
-	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
