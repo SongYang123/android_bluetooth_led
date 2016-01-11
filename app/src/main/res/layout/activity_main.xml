@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity"
+	style="@style/margin">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		style="@style/margin">
+
+		<Button
+			android:layout_weight="1"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="@string/str_cxn"
+			android:onClick="onCxnHandler"/>
+
+		<Button
+			android:layout_weight="1"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="@string/str_dxn"
+			android:onClick="onDxnHandler"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		style="@style/margin">
+
+		<Button
+			android:layout_weight="1"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="@string/str_start"
+			android:onClick="onStartHandler"/>
+
+		<Button
+			android:layout_weight="1"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="@string/str_stop"
+			android:onClick="onStopHandler"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		style="@style/margin">
+
+		<RadioGroup
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<RadioButton
+				android:id="@+id/rdo_on"
+				android:layout_weight="1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:checked="true"
+				android:text="@string/str_on"
+				android:onClick="onRdoHandler"/>
+
+			<RadioButton
+				android:id="@+id/rdo_blink"
+				android:layout_weight="1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:checked="false"
+				android:text="@string/str_blink"
+				android:onClick="onRdoHandler"/>
+
+			<RadioButton
+				android:id="@+id/rdo_fade"
+				android:layout_weight="1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:checked="false"
+				android:text="@string/str_fade"
+				android:onClick="onRdoHandler"/>
+
+		</RadioGroup>
+
+		<TextView
+			android:id="@+id/text_rise"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_rise"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="249"
+			android:progress="0"
+			style="@style/bar"/>
+
+		<TextView
+			android:id="@+id/text_fall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_fall"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="249"
+			android:progress="0"
+			style="@style/bar"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		style="@style/margin">
+
+		<TextView
+			android:id="@+id/text_red"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_red"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="255"
+			android:progress="0"
+			style="@style/bar"/>
+
+		<TextView
+			android:id="@+id/text_green"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_green"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="255"
+			android:progress="0"
+			style="@style/bar"/>
+
+		<TextView
+			android:id="@+id/text_blue"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_blue"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="255"
+			android:progress="0"
+			style="@style/bar"/>
+
+		<TextView
+			android:id="@+id/text_hue"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/text"/>
+
+		<SeekBar
+			android:id="@+id/seek_hue"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:max="240"
+			android:progress="0"
+			style="@style/bar"/>
+
+	</LinearLayout>
+
+</LinearLayout>

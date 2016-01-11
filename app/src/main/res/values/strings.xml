@@ -1,0 +1,12 @@
+<resources>
+
+	<string name="app_name">led_bluetooth</string>
+	<string name="str_cxn">Connect</string>
+	<string name="str_dxn">Disconnect</string>
+	<string name="str_start">Start</string>
+	<string name="str_stop">Stop</string>
+	<string name="str_on">On</string>
+	<string name="str_blink">Blink</string>
+	<string name="str_fade">Fade</string>
+
+</resources>
